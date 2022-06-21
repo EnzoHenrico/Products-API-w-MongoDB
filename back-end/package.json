@@ -2,7 +2,7 @@
   "name": "testes-unitarios",
   "version": "1.0.0",
   "description": "",
-  "main": "src/main.js",
+  "main": "api/src/main.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
