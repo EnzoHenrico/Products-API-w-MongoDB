@@ -5,15 +5,18 @@
   "main": "api/src/main.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon api/src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-validator": "^6.14.2",
     "fs": "^0.0.1-security",
-    "mongoose": "^6.4.0"
+    "mongoose": "^6.4.0",
+    "nodemon": "^2.0.19"
   }
 }
