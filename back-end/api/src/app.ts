@@ -1,17 +1,17 @@
-import express from "express";
+import express, { Express, Router, Request, Response } from "express";
 import dotenv from "dotenv";
 
-import database from "./database.js";
-import product from "./controllers/product.js";
+import database from "./database";
+import product from "./controllers/product";
 
 dotenv.config();
 
-await database;
+database();
 
 const { PORT } = process.env;
 
-const app = express();
-const router = express.Router();
+const app: Express = express();
+const router: Router = express.Router();
 
 app.use(express.json());
 app.use("/api/v1", router);
@@ -23,6 +23,6 @@ app.listen(PORT, () =>
 );
 
 // server health test
-router.get("/", (req, res) => {
+router.get("/", (req: Request, res: Response) => {
   res.status(200).send("Server ok!");
 });

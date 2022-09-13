@@ -1,8 +1,9 @@
-export default {
+import { Schema } from "express-validator";
+
+const schema: Schema = {
   code: {
     in: ["body"],
     isNumeric: {
-      options: true,
       errorMessage: "Product code must be a number",
     },
     isLength: {
@@ -23,8 +24,9 @@ export default {
   price: {
     in: ["body"],
     isNumeric: {
-      options: true,
       errorMessage: "Invalid Price format",
     },
   },
 };
+
+export default schema;

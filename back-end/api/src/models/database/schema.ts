@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
 // Database Model with Mongoose
-export default schema = new mongoose.Schema({
-  _id: Number,
+const productsSchema = new mongoose.Schema({
   code: Number,
-  img: URL,
+  img: String,
   label: String,
   price: Number,
 });
+
+export default mongoose.model('products', productsSchema);
