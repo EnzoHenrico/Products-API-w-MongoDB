@@ -39,16 +39,18 @@ async function getProductByCode(code: string) {
   return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE, results }
 }
 
-async function getProductByName(name: string) {
+async function getProductByName(search: string) {
   let RESPONSE_CODE: number;
   let RESPONSE_MESSAGE: string;
   let results: Array<any>;
   try {
-    results = await Products.find({name});
-    RESPONSE_CODE = 200;
+    const regex = new RegExp(`${search}`, 'i');    
+    results = await Products.find({ label: regex });
     if(results.length === 0){
+      RESPONSE_CODE = 204;
       RESPONSE_MESSAGE = "No Results";
     } else {
+      RESPONSE_CODE = 200;
       RESPONSE_MESSAGE = "OK";
     }
   } catch (error) {

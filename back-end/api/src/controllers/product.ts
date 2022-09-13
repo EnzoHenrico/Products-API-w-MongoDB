@@ -13,9 +13,9 @@ router.get("/find-code", async (req: Request, res: Response) => {
   res.status(service.code).json({ message: service.message, results: service.results });
 });
 
-router.get("/find-name", async (req: Request, res: Response) => {
-  const { name } = req.body;
-  const service = await getProductByName(name);
+router.get("/find-label", async (req: Request, res: Response) => {
+  const { label } = req.body;
+  const service = await getProductByName(label);
   res.status(service.code).json({ message: service.message, results: service.results });
 });
 
