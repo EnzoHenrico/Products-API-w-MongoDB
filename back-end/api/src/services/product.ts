@@ -1,27 +1,67 @@
-import Query from "../models/database/schema";
+import { Products } from "../models/database/schema";
 
 // CREATE
 async function addProduct(code: number, label: string, price: number, img: string) {
   let RESPONSE_CODE: number;
-  let RESPONDE_MESSAGE: string;
+  let RESPONSE_MESSAGE: string;
   
   try {
-    await Query.create({ code, label, price, img });
+    await Products.create({ code, label, price, img });
     RESPONSE_CODE = 200;
-    RESPONDE_MESSAGE = "Item Added";
+    RESPONSE_MESSAGE = "Item Added";
   } catch (error) {
     RESPONSE_CODE = 400;
-    RESPONDE_MESSAGE = "ERROR";
+    RESPONSE_MESSAGE = "ERROR";
     console.log(error);
   }
 
-  return { RESPONSE_CODE, RESPONDE_MESSAGE }
+  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE }
 }
+
 // READ
-function getProduct() {}
+async function getProductByCode(code: string) {
+  let RESPONSE_CODE: number;
+  let RESPONSE_MESSAGE: string;
+  let results: Array<any>;
+  try {
+    results = await Products.find({code});
+    RESPONSE_CODE = 200;
+    if(results.length === 0){
+      RESPONSE_MESSAGE = "No Results";
+    } else {
+      RESPONSE_MESSAGE = "OK";
+    }
+  } catch (error) {
+    results = [];
+    RESPONSE_CODE = 400;
+    RESPONSE_MESSAGE = "ERROR";
+  }
+  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE, results }
+}
+
+async function getProductByName(name: string) {
+  let RESPONSE_CODE: number;
+  let RESPONSE_MESSAGE: string;
+  let results: Array<any>;
+  try {
+    results = await Products.find({name});
+    RESPONSE_CODE = 200;
+    if(results.length === 0){
+      RESPONSE_MESSAGE = "No Results";
+    } else {
+      RESPONSE_MESSAGE = "OK";
+    }
+  } catch (error) {
+    results = [];
+    RESPONSE_CODE = 400;
+    RESPONSE_MESSAGE = "ERROR";
+  }
+  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE, results }
+}
+
 // UPDATE
 function updateProduct() {}
 // DELEAT
 function deleatProduct() {}
 
-export { addProduct };
+export { addProduct, getProductByCode, getProductByName };

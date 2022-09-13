@@ -8,4 +8,6 @@ const productsSchema = new mongoose.Schema({
   price: Number,
 });
 
-export default mongoose.model('products', productsSchema);
+const Products = mongoose.model('products', productsSchema);
+
+export { Products }
