@@ -1,9 +1,10 @@
-import express, { Express, Router, Request, Response } from "express";
+import express, { Express, Router, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 
 import database from "./database";
 import product from "./controllers/product";
-
+import { ValidationException } from './models/errors/exceptions';
+ 
 dotenv.config();
 
 database();
@@ -17,6 +18,20 @@ app.use(express.json());
 app.use("/api/v1", router);
 
 router.use("/product", product);
+
+app.use((error: any, req: Request, res: Response, next: NextFunction)=> {
+  if (error instanceof ValidationException) {
+    res.status(error.status).json({code: error.status, message: error.message})
+  } 
+  next(error)
+});
+
+app.use((error: any, req: Request, res: Response)=> {
+  return res.status(500).json({
+    status: 'error',
+    message: 'Internal server error',
+  });
+});
 
 app.listen(PORT, () =>
   console.log(`server listen on http://localhost:${PORT}`)
