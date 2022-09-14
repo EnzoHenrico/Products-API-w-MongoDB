@@ -2,68 +2,73 @@ import { Products } from "../models/database/schema";
 
 // CREATE
 async function addProduct(code: number, label: string, price: number, img: string) {
-  let RESPONSE_CODE: number;
-  let RESPONSE_MESSAGE: string;
-  
   try {
     await Products.create({ code, label, price, img });
-    RESPONSE_CODE = 200;
-    RESPONSE_MESSAGE = "Item Added";
+    
+    return { code: 201, message: "Item Added" }
   } catch (error) {
-    RESPONSE_CODE = 400;
-    RESPONSE_MESSAGE = "ERROR";
-    console.log(error);
-  }
 
-  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE }
+    console.log('ERR: ', error);
+    return { code: 400, message: "ERROR" }
+  }
 }
 
 // READ
-async function getProductByCode(code: string) {
-  let RESPONSE_CODE: number;
-  let RESPONSE_MESSAGE: string;
-  let results: Array<any>;
+async function getProductByCode(code: number) {
   try {
-    results = await Products.find({code});
-    RESPONSE_CODE = 200;
+    const results = await Products.find({code});
     if(results.length === 0){
-      RESPONSE_MESSAGE = "No Results";
+      return { code: 200, message: "No Results", results }
     } else {
-      RESPONSE_MESSAGE = "OK";
+      return { code: 200, message: "Success", results }
     }
   } catch (error) {
-    results = [];
-    RESPONSE_CODE = 400;
-    RESPONSE_MESSAGE = "ERROR";
+    return { code: 400, message: "ERROR", results: [] }
   }
-  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE, results }
 }
 
-async function getProductByName(search: string) {
-  let RESPONSE_CODE: number;
-  let RESPONSE_MESSAGE: string;
-  let results: Array<any>;
+async function getProductByLabel(search: string) {
   try {
-    const regex = new RegExp(`${search}`, 'i');    
-    results = await Products.find({ label: regex });
+    const regex = new RegExp(`${search}`, 'i');
+    const results = await Products.find({ label: regex });
     if(results.length === 0){
-      RESPONSE_CODE = 204;
-      RESPONSE_MESSAGE = "No Results";
+      return { code: 200, message: "No Results", results }
     } else {
-      RESPONSE_CODE = 200;
-      RESPONSE_MESSAGE = "OK";
+      return { code: 200, message: "Success", results }
     }
   } catch (error) {
-    results = [];
-    RESPONSE_CODE = 400;
-    RESPONSE_MESSAGE = "ERROR";
+    return { code: 400, message: "ERROR", results: [] }
   }
-  return { code: RESPONSE_CODE, message: RESPONSE_MESSAGE, results }
 }
 
-// UPDATE
-function updateProduct() {}
-// DELEAT
-function deleatProduct() {}
+// UPDATE 
+async function updateProduct(code: number, changes: object) {
+  try {
+    const result = await Products.findOneAndUpdate({ code }, { ...changes })
+    return { 
+      code: result ? 200 : 404, 
+      message: result ? "Item Updated" : "Intem not found", 
+      result, 
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: 400, message: "ERROR", result: {} }
+  }
+}
 
-export { addProduct, getProductByCode, getProductByName };
+// DELETE
+async function deleteProduct(code: number) {
+  try {
+    const deleted = await Products.findOneAndDelete({ code });    
+    return { 
+      code: deleted ? 200 : 404, 
+      message: deleted ? "Item deleted" : "Intem not found", 
+      deleted 
+    }
+  } catch (error) {
+    console.log(error);
+    return { code: 400, message: "ERROR", deleted: {} }
+  }
+}
+
+export { addProduct, getProductByCode, getProductByLabel, updateProduct, deleteProduct };
