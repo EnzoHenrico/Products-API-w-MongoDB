@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 import database from "./database";
 import product from "./controllers/product";
-import { ValidationException } from './models/errors/exceptions';
+import { DatabaseError } from './models/errors/exceptions';
  
 dotenv.config();
 
@@ -20,8 +20,8 @@ app.use("/api/v1", router);
 router.use("/product", product);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction)=> {
-  if (error instanceof ValidationException) {
-    res.status(error.status).json({code: error.status, message: error.message})
+  if (error instanceof DatabaseError) {
+    res.status(500).json({ error: error.name, message: error.message });
   } 
   next(error)
 });

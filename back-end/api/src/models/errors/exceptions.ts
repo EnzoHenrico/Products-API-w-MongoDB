@@ -1,21 +1,11 @@
-class ValidationException extends Error {
-  public status: number
-  public message: string
-  constructor(status: number, message: string) {
-    super(message)
-    this.status = status
-    this.message = message
-  }
-}
-
 class DatabaseError extends Error { 
-  public status: number
-  public message: string
-  constructor(status: number, message: string) {
+  public name: string;
+  public message: string;
+  constructor(message: string) {
     super(message)
-    this.status = status
-    this.message = message
+    this.name = "Database Error"
+    this.message = message;
   }
 }
 
-export { ValidationException, DatabaseError }
+export { DatabaseError }
